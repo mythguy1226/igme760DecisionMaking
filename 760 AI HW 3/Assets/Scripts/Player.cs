@@ -14,8 +14,9 @@ public class Player : MonoBehaviour
     // Store current state
     PlayerStates currentState;
 
-    // Path movement component
+    // Declare AI components here
     PathMovement movementControls;
+    AIFieldOfView visionDetector;
 
 
     // Start is called before the first frame update
@@ -24,8 +25,9 @@ public class Player : MonoBehaviour
         // Pursue goal by default
         currentState = PlayerStates.Pursuing;
 
-        // Get path movement component
+        // Get the AI components from game object
         movementControls = GetComponent<PathMovement>();
+        visionDetector = GetComponent<AIFieldOfView>();
     }
 
     // Update is called once per frame
