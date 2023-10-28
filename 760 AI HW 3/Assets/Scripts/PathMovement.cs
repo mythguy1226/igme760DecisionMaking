@@ -24,8 +24,10 @@ public class PathMovement : MonoBehaviour
     void Update()
     {
 		// Always follow path if not stopped
-		if(!isStopped)
+		if (!isStopped)
 			FollowPath(pathFinder.targetPath);
+		else
+			rb.velocity = Vector3.zero;
     }
 
 	// Method for following current path
@@ -82,8 +84,12 @@ public class PathMovement : MonoBehaviour
 			return;
 
 		// Set rotation towards velocity direction
-		transform.rotation = Quaternion.LookRotation(
+		Quaternion currentQuat = rb.rotation;
+		Quaternion targetQuat = Quaternion.LookRotation(
 			new Vector3(velocity.normalized.x, 0.0f, velocity.normalized.z),
 			transform.up);
+
+		// Using RotateTowards for gradual rotation across frames
+		rb.rotation = Quaternion.RotateTowards(currentQuat, targetQuat, 1.0f);
 	}
 }

@@ -17,9 +17,13 @@ public class Enemy : MonoBehaviour
     PathMovement movementControls;
     AIFieldOfView visionDetector;
     AStar pathFinder;
+    EnemyAnimationControls animControls;
 
     // Declare object used for target references
     GameObject targetObject;
+
+    // Get attacking range for enemy
+    public float attackRange;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +35,7 @@ public class Enemy : MonoBehaviour
         movementControls = GetComponent<PathMovement>();
         visionDetector = GetComponent<AIFieldOfView>();
         pathFinder = GetComponent<AStar>();
+        animControls = GetComponent<EnemyAnimationControls>();
     }
 
     // Update is called once per frame
@@ -41,6 +46,7 @@ public class Enemy : MonoBehaviour
         {
             // Handle Idle behavior
             case EnemyStates.Idle:
+
                 // Movement is disabled in this state
                 movementControls.isStopped = true;
 
@@ -55,6 +61,23 @@ public class Enemy : MonoBehaviour
 
             // Handle Pursuing behavior
             case EnemyStates.Pursuing:
+
+                // Calculate distance to the target
+                float distanceToTarget = Vector3.Distance(transform.position, targetObject.transform.position);
+
+                // Check if within attacking range
+                if (distanceToTarget <= attackRange)
+                {
+                    currentState = EnemyStates.Attacking;
+                }
+
+                // Check if enemy is in middle of attack animation
+                if (animControls.AttackAnimationPlaying())
+                {
+                    // Stop movement
+                    movementControls.isStopped = true;
+                }
+
                 // Enable movement and set agent's target to
                 // be the target object's position
                 movementControls.isStopped = false;
@@ -63,6 +86,19 @@ public class Enemy : MonoBehaviour
 
             // Handle Attacking behavior
             case EnemyStates.Attacking:
+
+                // Stop movement but still face target
+                movementControls.isStopped = true;
+                movementControls.FaceTarget(targetObject.transform.position - transform.position);
+
+                // Play attack sequence
+                animControls.PlayAttackAnimation();
+
+                // Check if within attacking range
+                if (Vector3.Distance(transform.position, targetObject.transform.position) > attackRange)
+                {
+                    currentState = EnemyStates.Pursuing;
+                }
                 break;
 
             // If anything weird ever happens to enum value,
