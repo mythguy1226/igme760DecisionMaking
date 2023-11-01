@@ -24,6 +24,8 @@ public class Enemy : MonoBehaviour
 
     // Get attacking range for enemy
     public float attackRange;
+    public GameObject fireBallObj;
+    Rigidbody rb;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +38,7 @@ public class Enemy : MonoBehaviour
         visionDetector = GetComponent<AIFieldOfView>();
         pathFinder = GetComponent<AStar>();
         animControls = GetComponent<EnemyAnimationControls>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -108,5 +111,11 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
+    }
+
+    public void CastSpell()
+    {
+        // Instantiate the fireball
+        GameObject fball = Instantiate(fireBallObj, rb.position + new Vector3(0, 1, 0) + (rb.transform.forward * 2), rb.rotation);
     }
 }

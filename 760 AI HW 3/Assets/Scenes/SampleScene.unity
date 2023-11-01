@@ -1311,6 +1311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRange: 5
+  fireBallObj: {fileID: 3325247972174784246, guid: 2ac688ce134feab49b74e2eb5143324c, type: 3}
 --- !u!136 &1570926482
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1371,6 +1372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRange: 5
+  fireBallObj: {fileID: 3325247972174784246, guid: 2ac688ce134feab49b74e2eb5143324c, type: 3}
 --- !u!114 &1788052761
 MonoBehaviour:
   m_ObjectHideFlags: 0
