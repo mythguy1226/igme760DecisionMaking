@@ -79956,7 +79956,7 @@ AnimationClip:
   - time: 0.93333334
     functionName: CastSpell
     data: 
-    objectReferenceParameter: {fileID: 11500000, guid: c5842ebacdb33364490f66a9365211f6, type: 3}
+    objectReferenceParameter: {fileID: 11500000, guid: 690e5c3fec229a544a1d51dcb9ecb091, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

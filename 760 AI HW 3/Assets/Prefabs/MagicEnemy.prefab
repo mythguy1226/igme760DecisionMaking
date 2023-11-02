@@ -1508,6 +1508,7 @@ GameObject:
   - component: {fileID: 5889627205128239593}
   - component: {fileID: 5889627205128239592}
   - component: {fileID: 5889627205128239596}
+  - component: {fileID: -7766369502779849316}
   m_Layer: 7
   m_Name: MagicEnemy
   m_TagString: Untagged
@@ -1594,9 +1595,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5842ebacdb33364490f66a9365211f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackRange: 5
-  fireBallObj: {fileID: 3325247972174784246, guid: 2ac688ce134feab49b74e2eb5143324c, type: 3}
-  attackCooldown: 1
 --- !u!114 &5889627205128239594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1609,7 +1607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 334e4a974ebede04ba906a6db7a865f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 6
+  radius: 8
   targetMask:
     serializedVersion: 2
     m_Bits: 64
@@ -1660,6 +1658,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3220960ad869d91429f90f387bcea8c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-7766369502779849316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6736612553246749218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 690e5c3fec229a544a1d51dcb9ecb091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRange: 7
+  fireBallObj: {fileID: 3325247972174784246, guid: 2ac688ce134feab49b74e2eb5143324c, type: 3}
+  attackCooldown: 3
+  cooldownTimer: 0
+  canAttack: 1
+  health: 100
 --- !u!1 &6825530834835231097
 GameObject:
   m_ObjectHideFlags: 0

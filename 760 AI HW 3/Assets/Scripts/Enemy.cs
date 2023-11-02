@@ -18,18 +18,10 @@ public class Enemy : MonoBehaviour
     AIFieldOfView visionDetector;
     AStar pathFinder;
     EnemyAnimationControls animControls;
+    CombatComponent combatControls;
 
     // Declare object used for target references
     GameObject targetObject;
-
-    // Get attacking range for enemy
-    public float attackRange;
-    public GameObject fireBallObj;
-    Rigidbody rb;
-    public float attackCooldown = 5.0f;
-    float cooldownTimer;
-    bool canAttack;
-    float health = 100.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -42,23 +34,12 @@ public class Enemy : MonoBehaviour
         visionDetector = GetComponent<AIFieldOfView>();
         pathFinder = GetComponent<AStar>();
         animControls = GetComponent<EnemyAnimationControls>();
-        rb = GetComponent<Rigidbody>();
-
-        // Set attack fields
-        cooldownTimer = attackCooldown;
+        combatControls = GetComponent<CombatComponent>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Update attack cooldown timers
-        cooldownTimer -= Time.deltaTime;
-        if(cooldownTimer <= 0.0f)
-        {
-            canAttack = true;
-        }
-
-
         // Finite State machine for handling main character behaviors
         switch (currentState)
         {
@@ -84,7 +65,7 @@ public class Enemy : MonoBehaviour
                 float distanceToTarget = Vector3.Distance(transform.position, targetObject.transform.position);
 
                 // Check if within attacking range
-                if (distanceToTarget <= attackRange)
+                if (distanceToTarget <= combatControls.attackRange)
                 {
                     currentState = EnemyStates.Attacking;
                 }
@@ -110,15 +91,15 @@ public class Enemy : MonoBehaviour
                 movementControls.FaceTarget(targetObject.transform.position - transform.position);
 
                 // Play attack sequence
-                if(canAttack)
+                if(combatControls.canAttack)
                 {
                     animControls.PlayAttackAnimation();
-                    canAttack = false;
-                    cooldownTimer = 3.0f;
+                    combatControls.canAttack = false;
+                    combatControls.cooldownTimer = combatControls.attackCooldown;
                 }
 
                 // Check if within attacking range
-                if (Vector3.Distance(transform.position, targetObject.transform.position) > attackRange)
+                if (Vector3.Distance(transform.position, targetObject.transform.position) > combatControls.attackRange)
                 {
                     currentState = EnemyStates.Pursuing;
                 }
@@ -131,24 +112,5 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.name.Contains("Fireball"))
-        {
-            health -= 50.0f;
-
-            if(health <= 0.0f)
-            {
-                Destroy(gameObject);
-            }
-        }
-    }
-
-    public void CastSpell()
-    {
-        // Instantiate the fireball
-        GameObject fball = Instantiate(fireBallObj, rb.position + new Vector3(0, 1, 0) + (rb.transform.forward * 2), rb.rotation);
     }
 }
