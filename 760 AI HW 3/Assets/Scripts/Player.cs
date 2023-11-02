@@ -17,7 +17,10 @@ public class Player : MonoBehaviour
     // Declare AI components here
     PathMovement movementControls;
     AIFieldOfView visionDetector;
+    PlayerAnimationControls animControls;
 
+    // Get reference to shield object
+    public GameObject shieldObject;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +31,7 @@ public class Player : MonoBehaviour
         // Get the AI components from game object
         movementControls = GetComponent<PathMovement>();
         visionDetector = GetComponent<AIFieldOfView>();
+        animControls = GetComponent<PlayerAnimationControls>();
     }
 
     // Update is called once per frame
@@ -39,10 +43,30 @@ public class Player : MonoBehaviour
             // Handle Pursuing behavior
             case PlayerStates.Pursuing:
                 movementControls.isStopped = false;
+                animControls.SetBlock(false);
+                shieldObject.SetActive(false);
+
+                // Check visual detections for enemy encounters
+                if (visionDetector.detectedColliders.Count > 0)
+                {
+                    // Set the state to blocking
+                    currentState = PlayerStates.Defending;
+                }
+
                 break;
 
             // Handle Defending behavior
             case PlayerStates.Defending:
+                movementControls.isStopped = true;
+                animControls.SetBlock(true);
+                shieldObject.SetActive(true);
+
+                // Check visual detections for enemy encounters
+                if (visionDetector.detectedColliders.Count == 0)
+                {
+                    // Set the state to blocking
+                    currentState = PlayerStates.Pursuing;
+                }
                 break;
 
             // Handle Attacking behavior
