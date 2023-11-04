@@ -4880,7 +4880,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8434501504983514553}
   m_Layer: 0
-  m_Name: Shield_PS
+  m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

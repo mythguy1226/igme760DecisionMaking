@@ -10,6 +10,7 @@ public class PlayerAnimationControls : MonoBehaviour
     // Declare any animation hashes here
     int walkingHash;
     int blockingHash;
+    int collectHash;
 
     // Get rigid body component
     Rigidbody rb;
@@ -21,6 +22,7 @@ public class PlayerAnimationControls : MonoBehaviour
         animator = gameObject.GetComponent<Animator>();
         walkingHash = Animator.StringToHash("IsWalking");
         blockingHash = Animator.StringToHash("IsBlocking");
+        collectHash = Animator.StringToHash("Collect");
         rb = GetComponent<Rigidbody>();
     }
 
@@ -39,5 +41,22 @@ public class PlayerAnimationControls : MonoBehaviour
     {
         // Update blocking hash with method parameter
         animator.SetBool(blockingHash, isBlocking);
+    }
+
+    // Method for triggering collect state
+    public void CollectItem()
+    {
+        // Return if already collecting
+        if (IsCollecting())
+            return;
+
+        // Trigger collection animation
+        animator.SetTrigger(collectHash);
+    }
+
+    // Method for getting collection state
+    bool IsCollecting()
+    {
+        return animator.GetCurrentAnimatorStateInfo(0).IsName("Collect");
     }
 }

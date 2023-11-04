@@ -6,7 +6,7 @@ public enum PlayerStates
 {
     Pursuing,
     Defending,
-    Attacking
+    Collecting
 }
 
 public class Player : MonoBehaviour
@@ -22,6 +22,12 @@ public class Player : MonoBehaviour
     // Get reference to shield object
     public GameObject shieldObject;
 
+    // Get game object to pursue
+    public GameObject goalCollectible;
+
+    // Particle system for post-collection
+    public GameObject collectParticles;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +38,9 @@ public class Player : MonoBehaviour
         movementControls = GetComponent<PathMovement>();
         visionDetector = GetComponent<AIFieldOfView>();
         animControls = GetComponent<PlayerAnimationControls>();
+
+        // Tell movement controls to set new goal
+        movementControls.SetTargetPath(goalCollectible.transform.position);
     }
 
     // Update is called once per frame
@@ -42,6 +51,7 @@ public class Player : MonoBehaviour
         {
             // Handle Pursuing behavior
             case PlayerStates.Pursuing:
+                // Enable movement and disable shields
                 movementControls.isStopped = false;
                 animControls.SetBlock(false);
                 shieldObject.SetActive(false);
@@ -53,10 +63,18 @@ public class Player : MonoBehaviour
                     currentState = PlayerStates.Defending;
                 }
 
+                // Check if player has reached their goal
+                if(movementControls.hasReachedDestination && goalCollectible != null)
+                {
+                    // Set the state to collecting
+                    currentState = PlayerStates.Collecting;
+                }
+
                 break;
 
             // Handle Defending behavior
             case PlayerStates.Defending:
+                // Disable movement and enable shield
                 movementControls.isStopped = true;
                 animControls.SetBlock(true);
                 shieldObject.SetActive(true);
@@ -69,8 +87,14 @@ public class Player : MonoBehaviour
                 }
                 break;
 
-            // Handle Attacking behavior
-            case PlayerStates.Attacking:
+            // Handle Collecting behavior
+            case PlayerStates.Collecting:
+                // Disable movement and collect goal item
+                movementControls.isStopped = true;
+
+                // Trigger collection in anim controls
+                animControls.CollectItem();
+
                 break;
 
             // If anything weird ever happens to enum value,
@@ -80,5 +104,24 @@ public class Player : MonoBehaviour
                 break;
         }
 
+    }
+
+    // Method used for triggering collection of item
+    // Will be called from anim event inside collect animation
+    public void DestroyCollectedItem()
+    {
+        // Destroy goal collectible
+        Destroy(goalCollectible);
+
+        // Set state back to pursue
+        currentState = PlayerStates.Pursuing;
+
+        // Get children of object as particle systems
+        ParticleSystem[] particles = collectParticles.GetComponentsInChildren<ParticleSystem>();
+        foreach(ParticleSystem particle in particles)
+        {
+            // Play particle
+            particle.Play();
+        }
     }
 }

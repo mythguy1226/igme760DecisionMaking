@@ -11,6 +11,7 @@ public enum EnemyStates
 
 public class Enemy : MonoBehaviour
 {
+    // Store current state
     EnemyStates currentState;
 
     // Declare AI components here
@@ -60,6 +61,9 @@ public class Enemy : MonoBehaviour
 
             // Handle Pursuing behavior
             case EnemyStates.Pursuing:
+                // Return if the target object is null
+                if (targetObject == null)
+                    return;
 
                 // Calculate distance to the target
                 float distanceToTarget = Vector3.Distance(transform.position, targetObject.transform.position);
@@ -85,6 +89,9 @@ public class Enemy : MonoBehaviour
 
             // Handle Attacking behavior
             case EnemyStates.Attacking:
+                // Return if the target object is null
+                if (targetObject == null)
+                    return;
 
                 // Stop movement but still face target
                 movementControls.isStopped = true;

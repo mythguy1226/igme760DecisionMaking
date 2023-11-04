@@ -9,6 +9,9 @@ public class CombatComponent : MonoBehaviour
     public GameObject fireBallObj;
     Rigidbody rb;
 
+    // Get point reference to casting location
+    public GameObject castingLocationObject;
+
     // Attack cooldown management
     public float attackCooldown = 2.0f;
     public float cooldownTimer;
@@ -39,11 +42,15 @@ public class CombatComponent : MonoBehaviour
     // Handle blocking collisions here
     private void OnCollisionEnter(Collision collision)
     {
-        // Collision handler for fireball projectiles
-        if (collision.gameObject.name.Contains("Fireball"))
+        // Get collision object as magic projectile
+        MagicProjectile proj = collision.gameObject.GetComponent<MagicProjectile>();
+        if(proj != null)
         {
+            // Get projectile's damage
+            float damage = proj.damage;
+
             // Negate health and if below 0 then destroy object
-            health -= 50.0f;
+            health -= damage;
             if (health <= 0.0f)
             {
                 Destroy(gameObject);
@@ -53,9 +60,10 @@ public class CombatComponent : MonoBehaviour
 
 
     // Method for instantiating spell projectile
+    // Will be called from anim event inside attack animation 
     public void CastSpell()
     {
         // Instantiate the fireball
-        GameObject fball = Instantiate(fireBallObj, rb.position + new Vector3(0, 1, 0) + (rb.transform.forward * 2), rb.rotation);
+        GameObject fball = Instantiate(fireBallObj, castingLocationObject.transform.position, rb.rotation);
     }
 }

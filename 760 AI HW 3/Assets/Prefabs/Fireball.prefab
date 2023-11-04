@@ -78,6 +78,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileSpeed: 4
   collisionEffect: {fileID: 5717322123192662955, guid: e701e75e7a7c70246849429ed331b40c, type: 3}
+  damage: 40
 --- !u!1001 &8970261702469229554
 PrefabInstance:
   m_ObjectHideFlags: 0

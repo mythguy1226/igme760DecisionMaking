@@ -8,13 +8,14 @@ public class PathMovement : MonoBehaviour
 	public float maxSpeed;
 	public float targetRadius;
 	public bool isStopped = false;
+	public bool hasReachedDestination = false;
 	
 	// Reference to pathfinding component and rigidbody
 	AStar pathFinder;
 	public Rigidbody rb;
 
     // Get the pathfinding component to reference path
-    void Start()
+    void Awake()
     {
 		pathFinder = GetComponent<AStar>();
 		rb = GetComponent<Rigidbody>();
@@ -58,6 +59,7 @@ public class PathMovement : MonoBehaviour
 			if (distance <= targetRadius)
 			{
 				rb.velocity = new Vector3();
+				hasReachedDestination = true;
 				return;
 			}
 
@@ -92,4 +94,12 @@ public class PathMovement : MonoBehaviour
 		// Using RotateTowards for gradual rotation across frames
 		rb.rotation = Quaternion.RotateTowards(currentQuat, targetQuat, 1.0f);
 	}
+
+	// Method for setting new target location
+	public void SetTargetPath(Vector3 position)
+    {
+		// Reset destination reach and set new path destination
+		pathFinder.target = position;
+		hasReachedDestination = false;
+    }
 }

@@ -9,6 +9,7 @@ public class MagicProjectile : MonoBehaviour
     public GameObject collisionEffect;
     Rigidbody rb;
     bool isDeflected = false;
+    public float damage = 50.0f;
 
     // Start is called before the first frame update
     void Start()
