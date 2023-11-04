@@ -4,7 +4,7 @@ In this project the player/main character will pursue a magic orb to collect its
 If the main character encounters enemies in its FOV, they will activate their magic shield to<br>
 defend oncoming attacks. If the enemies encounter the main character they will start pursuing<br>
 them and attack if they are in range. Each character utilizes its own finite state machine to control<br>
-their behavior and utilize a variety of different components for detection and achieving their goals.<br>
+their behavior and has a variety of different components for detection and achieving their goals.<br>
 While navigating the level, each character also utilizes the A* algorithm for finding the shortest path and avoiding obstacles.
 
 # Screenshots
